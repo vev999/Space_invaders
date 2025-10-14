@@ -1,5 +1,5 @@
 import pygame
-from settings import WIDTH, HEIGHT, PLAYER_IMG, PlAYER_SPEED, PLAYER_START_Y, PLAYER_IMMO_COOLDOWN, PLAYER_LIVES, PLAYER_HIT_IMG
+from settings import WIDTH, HEIGHT, PLAYER_IMG, PlAYER_SPEED, PLAYER_START_Y, PLAYER_IMMO_COOLDOWN, PLAYER_LIVES, PLAYER_HIT_IMG, PLAYFIELD_TOP_MARGIN
 
 class Player:
     
@@ -34,8 +34,8 @@ class Player:
             self.rect.left = 0
         if self.rect.right > WIDTH:
             self.rect.right = WIDTH
-        if self.rect.top < 0:
-            self.rect.top = 0
+        if self.rect.top < PLAYFIELD_TOP_MARGIN:
+            self.rect.top = PLAYFIELD_TOP_MARGIN
         if self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT
         

@@ -1,13 +1,25 @@
 import sys
 import pygame
-from settings import FPS, HEIGHT, WIDTH, BG_COLOR, ENEMY_START_Y, LEVELUPDATE
+from settings import (
+    FPS,
+    HEIGHT,
+    WIDTH,
+    BG_COLOR,
+    ENEMY_START_Y,
+    LEVELUPDATE,
+    HUD_BG_COLOR,
+    HUD_TEXT_COLOR,
+    HUD_HEIGHT,
+    HUD_FONT_SIZE,
+    HUD_PADDING,
+)
 from entities.player import Player
 from effects.background import Starfield
-from entities.bullets import Bullet
 from entities.bullet_manager import BulletManager, EnemyBulletManager
 from entities.enemy import Enemy
 from effects.collision import handle_collisions
 from effects.game_over import print_game_over
+from effects.hud import hud
 
 
 def main():
@@ -15,12 +27,14 @@ def main():
     pygame.display.set_caption("SPACE INVADERS")
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     clock = pygame.time.Clock()
+    hud_font = pygame.font.Font(None, HUD_FONT_SIZE)
     player = Player(WIDTH // 2, (64,64))
     background = Starfield()
     lvl = LEVELUPDATE()
     bullet_manager = BulletManager()
     enemies = []
     score = 0
+    wave = 1
     for x in range(80, WIDTH, 80):
         enemies.append(Enemy(x, points=100, scale=(32,28), level=lvl))
         
@@ -51,6 +65,7 @@ def main():
         enemies = [e for e in enemies if not e.dead]
         if not enemies:  
             lvl.level_up()
+            wave += 1
             enemies = [Enemy(x, points=100, scale=(30,28),level=lvl) for x in range(80, WIDTH, 80)]
 
 
@@ -70,6 +85,7 @@ def main():
 
         player.draw(screen)
         
+        hud(screen, hud_font, score, player, wave)
         pygame.display.flip()
 
         if player.lives <= 0.0:
