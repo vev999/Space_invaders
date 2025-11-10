@@ -20,7 +20,7 @@ from entities.enemy import Enemy
 from effects.collision import handle_collisions
 from effects.game_over import print_game_over
 from effects.hud import hud
-
+from entities.cover import Cover
 
 def main():
     pygame.init()
@@ -32,6 +32,11 @@ def main():
     background = Starfield()
     lvl = LEVELUPDATE()
     bullet_manager = BulletManager()
+    covers = [
+        Cover((150, HEIGHT - 200)),
+        Cover((WIDTH - 150, HEIGHT - 200)),
+        Cover((WIDTH // 2, HEIGHT - 200)),
+    ]
     enemies = []
     score = 0
     wave = 1
@@ -50,7 +55,7 @@ def main():
                 running = False
         screen.fill(BG_COLOR)
         keys = pygame.key.get_pressed()
-        score += handle_collisions(player, enemies, bullet_manager, enemy_manger)
+        score += handle_collisions(player, enemies, bullet_manager, enemy_manger, covers)
         
         ##UPDATES##
         
@@ -78,6 +83,9 @@ def main():
 
         bullet_manager.draw(screen)
 
+        for cover in covers:
+            cover.draw(screen)
+
         for e in enemies:
             e.draw(screen)
         
@@ -86,6 +94,7 @@ def main():
         player.draw(screen)
         
         hud(screen, hud_font, score, player, wave)
+       
         pygame.display.flip()
 
         if player.lives <= 0.0:
@@ -96,7 +105,6 @@ def main():
 
     pygame.quit()
     print_game_over()
-    print(f"{player.lives}")
     print (f"YOUR SCORE IS {score}")
     sys.exit()
     
